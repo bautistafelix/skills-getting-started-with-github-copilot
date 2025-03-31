@@ -19,6 +19,19 @@
           <!-- Activities will be loaded here -->
           <p>Loading activities...</p>
         </div>
+        <!-- Add a template for activity cards -->
+        <script type="text/template" id="activity-card-template">
+          <div class="activity-card">
+            <h4>{activity_name}</h4>
+            <p><strong>Description:</strong> {description}</p>
+            <p><strong>Schedule:</strong> {schedule}</p>
+            <p><strong>Max Participants:</strong> {max_participants}</p>
+            <p><strong>Participants:</strong></p>
+            <ul class="participants-list">
+              <!-- Participants will be dynamically added here -->
+            </ul>
+          </div>
+        </script>
       </section>
 
       <section id="signup-container">
