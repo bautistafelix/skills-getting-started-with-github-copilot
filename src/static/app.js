@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const activitySelect = document.getElementById("activity");
   const signupForm = document.getElementById("signup-form");
   const messageDiv = document.getElementById("message");
+  const activityCardTemplate = document.getElementById("activity-card-template").innerHTML;
 
   // Function to fetch activities from API
   async function fetchActivities() {
@@ -14,25 +15,30 @@ document.addEventListener("DOMContentLoaded", () => {
       activitiesList.innerHTML = "";
 
       // Populate activities list
-      Object.entries(activities).forEach(([name, details]) => {
-        const activityCard = document.createElement("div");
-        activityCard.className = "activity-card";
+      activities.forEach((activity) => {
+        let cardHtml = activityCardTemplate
+          .replace("{activity_name}", activity.name)
+          .replace("{description}", activity.description)
+          .replace("{schedule}", activity.schedule)
+          .replace("{max_participants}", activity.max_participants);
 
-        const spotsLeft = details.max_participants - details.participants.length;
+        const tempDiv = document.createElement("div");
+        tempDiv.innerHTML = cardHtml.trim();
+        const cardElement = tempDiv.firstChild;
 
-        activityCard.innerHTML = `
-          <h4>${name}</h4>
-          <p>${details.description}</p>
-          <p><strong>Schedule:</strong> ${details.schedule}</p>
-          <p><strong>Availability:</strong> ${spotsLeft} spots left</p>
-        `;
+        const participantsList = cardElement.querySelector(".participants-list");
+        activity.participants.forEach((participant) => {
+          const li = document.createElement("li");
+          li.textContent = participant;
+          participantsList.appendChild(li);
+        });
 
-        activitiesList.appendChild(activityCard);
+        activitiesList.appendChild(cardElement);
 
         // Add option to select dropdown
         const option = document.createElement("option");
-        option.value = name;
-        option.textContent = name;
+        option.value = activity.name;
+        option.textContent = activity.name;
         activitySelect.appendChild(option);
       });
     } catch (error) {
